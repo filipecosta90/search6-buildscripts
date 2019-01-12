@@ -13,7 +13,7 @@ MD5=${MD5:-8aac833c943d8e90d51b697b27d4384d}
 SRC_ARCHIVE=${SRC_ARCHIVE:-http://www.fftw.org/fftw-${VERSION}.tar.gz}
 
 # --enabled-shared builds shared libraries in addition to static at the moment
-COMMON_FLAGS=${COMMON_FLAGS:-"--enable-shared --enable-threads --enable-openmp"}
+COMMON_FLAGS=${COMMON_FLAGS:-"--enable-shared --enable-threads"} # --enable-openmp"}
 LEGION_SSE=${LEGION_SSE:-yes}
 # If wanting to build SSE2-only for Legion, add --enable-sse2
 if [ "$LEGION_SSE" == "yes" ]
@@ -25,14 +25,19 @@ set -e
 
 export PATH=$INSTALL_PREFIX/bin:$PATH
 
-mkdir -p /dev/shm/$NAME
-temp_dir=`mktemp -d -p /dev/shm/$NAME`
+temp_dir=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
 cd $temp_dir
 
 wget $SRC_ARCHIVE
 
-CHECKSUM=`md5sum fftw-${VERSION}.tar.gz| awk '{print $1}'`
+if [ "$(uname)" == "Darwin" ]; then
+    # Mac OS X platform
+    CHECKSUM=`md5 -r fftw-${VERSION}.tar.gz| awk '{print $1}'`
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # GNU/Linux platform
+    CHECKSUM=`md5sum fftw-${VERSION}.tar.gz| awk '{print $1}'`
+fi
 
 if [ "$MD5" == "$CHECKSUM" ]
 then
