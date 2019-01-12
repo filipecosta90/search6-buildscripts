@@ -6,9 +6,9 @@
 # Builds serial, OpenMP, threaded at various precisions
 #
 
-COMPILER_TAG=${COMPILER_TAG:-gnu-4.9.2}
+COMPILER_TAG=${COMPILER_TAG:-gnu-7.3.0}
 VERSION=${VERSION:-3.3.8}
-INSTALL_PREFIX=${INSTALL_PREFIX:-/shared/apps/fftw/$VERSION/$COMPILER_TAG}
+INSTALL_PREFIX=${INSTALL_PREFIX:-/share/apps/fftw/$VERSION/$COMPILER_TAG}
 MD5=${MD5:-8aac833c943d8e90d51b697b27d4384d}
 SRC_ARCHIVE=${SRC_ARCHIVE:-http://www.fftw.org/fftw-${VERSION}.tar.gz}
 
